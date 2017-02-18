@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+{% if error_message %}
+    <p>{{ error_message }}</p>
+{% else %}
+
+    {{ data|safe }}
+
+{% endif %}
+<form method="post" action="{% url 'create_deck' %}">
+    {% csrf_token %}
+    <label for="deck_name">Deck name:</label>
+    <input type="text" name="deck_name" id="deck_name"/>
+    <input type="submit" value="Create"/>
+</form>
+</body>
+</html>
