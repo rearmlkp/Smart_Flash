@@ -1,5 +1,5 @@
 import requests
-import xmltodict
+# import xmltodict
 from lxml import etree
 from django.shortcuts import render
 from rest_framework import status
@@ -94,9 +94,9 @@ def create_deck(request):
     return homepage(request)
 
 
-def deck_detail(request, pk):
-    if request.method == 'GET':
-
-    else:
+# def deck_detail(request, pk):
+#     if request.method == 'GET':
+#
+#     else:
 
 # TODO: Deck view: Add a card, edit card, render cards using xslt
