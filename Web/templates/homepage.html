@@ -5,6 +5,7 @@
     <title>Home Page</title>
 </head>
 <body>
+<a href="{% url 'logout' %}">Logout</a>
 {% if error_message %}
     <p>{{ error_message }}</p>
 {% else %}
@@ -12,7 +13,7 @@
     {{ data|safe }}
 
 {% endif %}
-<form method="post" action="{% url 'create_deck' %}">
+<form method="post" action="{% url 'deck_create' %}">
     {% csrf_token %}
     <label for="deck_name">Deck name:</label>
     <input type="text" name="deck_name" id="deck_name"/>

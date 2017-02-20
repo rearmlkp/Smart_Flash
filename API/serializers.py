@@ -34,4 +34,4 @@ class DeckSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Deck
-        fields = ('id', 'name')
+        fields = ('user', 'id', 'name')

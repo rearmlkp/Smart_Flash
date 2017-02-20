@@ -224,7 +224,7 @@ def login(request):
     username = request.data['username']
     password = request.data['password']
     try:
-        user = User.objects.get(username=username, password=password)
+        _ = User.objects.get(username=username, password=password)
     except User.DoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
     return Response(status=status.HTTP_200_OK)
@@ -235,7 +235,7 @@ def create_user(request):
     username = request.data['username']
     password = request.data['password']
     try:
-        user = User.objects.get(username=username)
+        _ = User.objects.get(username=username)
     except User.DoesNotExist:
         user = User(username=username, password=password)
         user.save()
@@ -265,3 +265,5 @@ def create_deck(request):
     deck = Deck(name=request.data['deck_name'], user=user)
     deck.save()
     return Response(status=status.HTTP_201_CREATED)
+
+# TODO: Edit, Delete deck API

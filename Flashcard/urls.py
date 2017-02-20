@@ -37,8 +37,11 @@ urlpatterns = [
 
     # Web Stuff
     url(r'^web/$', web_views.index, name='index'),
+    url(r'^web/logout/$', web_views.logout, name='logout'),
     url(r'^web/register/$', web_views.register, name='register'),
-    url(r'^web/create_deck$', web_views.create_deck, name='create_deck'),
+    url(r'^web/deck/create', web_views.deck_create, name='deck_create'),
+    url(r'^web/deck/edit$', web_views.deck_edit, name='deck_edit'),
+    url(r'^web/deck/delete$', web_views.deck_delete, name='deck_delete'),
 
     url(r'^api-auth/', include('rest_framework.urls')),
 ]

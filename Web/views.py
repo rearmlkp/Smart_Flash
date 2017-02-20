@@ -1,5 +1,4 @@
 import requests
-# import xmltodict
 from lxml import etree
 from django.shortcuts import render
 from rest_framework import status
@@ -36,7 +35,11 @@ def index(request):
         return homepage(request)
 
 
-# TODO: implement logout
+def logout(request):
+    del request.session['username']
+    request.session.modified = True
+    return render(request, 'index.html')
+
 
 def register(request):
     if request.method == 'GET':
@@ -66,22 +69,26 @@ def homepage(request):
         })
 
     # XML validation:
-    schema = open('Schema/deck_schema.xsd', 'r')
-    xmlschema_doc = etree.parse(schema)
-    xmlschema = etree.XMLSchema(xmlschema_doc)
+    schema_file = open('Schema/deck_schema.xsd', 'r')
+    schema_file = etree.parse(schema_file)
+    xmlschema = etree.XMLSchema(schema_file)
     xml_doc = etree.XML(r.content)
     print(xmlschema.validate(xml_doc))
     if xmlschema.validate(xml_doc):
-        # TODO: Create XSLT file to test
-        xslt = open('XSLT/decks_xslt.xsl')
-        transform = etree.XSLT(xslt)
+        xslt_file = open('XSLT/decks_xslt.xsl', 'r')
+        xslt_file = etree.parse(xslt_file)
+        transform = etree.XSLT(xslt_file)
         result = transform(xml_doc)
         return render(request, 'homepage.html', {
             'data': str(result)
         })
+    else:
+        return render(request, 'homepage.html', {
+            'error_message': "error while validating XML"
+        })
 
 
-def create_deck(request):
+def deck_create(request):
     username = request.session['username']
     r = requests.post(API_url + "decks/create/", data={
         'username': username,
@@ -93,6 +100,7 @@ def create_deck(request):
         })
     return homepage(request)
 
+# TODO: Edit, Delete decks
 
 # def deck_detail(request, pk):
 #     if request.method == 'GET':

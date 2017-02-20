@@ -3,27 +3,28 @@
     <xs:element name="root">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="list-item"/>
+                <xs:element maxOccurs="unbounded" ref="list-item"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
     <xs:element name="list-item">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="name"/>
                 <xs:element ref="user"/>
+                <xs:element ref="id"/>
+                <xs:element ref="name"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="name" type="xs:NCName"/>
     <xs:element name="user">
         <xs:complexType>
             <xs:sequence>
+                <xs:element ref="id"/>
                 <xs:element ref="username"/>
-                <xs:element ref="password"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="username" type="xs:NCName"/>
-    <xs:element name="password" type="xs:NCName"/>
+    <xs:element name="username" type="xs:string"/>
+    <xs:element name="name" type="xs:string"/>
+    <xs:element name="id" type="xs:integer"/>
 </xs:schema>
