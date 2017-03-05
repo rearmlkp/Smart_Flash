@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Review</title>
+</head>
+<body>
+<p>Welcome, {{ username }}</p>
+<a href="{% url 'logout' %}">Logout</a>
+
+<p id="display"></p>
+
+<div id="input_box"></div>
+
+<input type="button" id="check" value="Check">
+
+<script type="text/javascript">
+    var displays = {{ displays|safe }};
+    var words = {{ words|safe }};
+    var i = 0, j;
+    document.getElementById("display").innerHTML = displays[i];
+    var html = "";
+    for (j = 0; j < words[i].length; ++j) {
+        var s = "input_" + j;
+        html += '<input type="text" id="' + s + '" />'
+    }
+    document.getElementById("input_box").innerHTML = html;
+    document.getElementById("check").onclick = function () {
+        var flag = true;
+        for (j = 0; j < words[i].length; ++j) {
+            var s = "input_" + j;
+            var inputed = document.getElementById(s).value;
+            if (inputed != words[i][j]) flag = false;
+        }
+        if (flag) {
+            alert('Good answer!');
+        } else {
+            alert('Wrong answer!');
+        }
+        ++i;
+        if (i == displays.length) {
+            alert('You have finished reviewing!');
+            // Make a summarized page
+            
+        }
+        else {
+            document.getElementById("display").innerHTML = displays[i];
+            var html = "";
+            for (j = 0; j < words[i].length; ++j) {
+                var s = "input_" + j;
+                html += '<input type="text" id="' + s + '" />'
+            }
+            document.getElementById("input_box").innerHTML = html;
+        }
+    }
+</script>
+</body>
+</html>

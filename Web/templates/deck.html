@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home Page</title>
+    <title>Deck</title>
 </head>
 <body>
 <p>Welcome, {{ username }}</p>
@@ -14,11 +14,14 @@
     {{ data|safe }}
 
 {% endif %}
-<form method="post" action="{% url 'deck_create' %}">
+<form method="post" action="{% url 'card_create' pk %}">
     {% csrf_token %}
-    <label for="deck_name">Deck name:</label>
-    <input type="text" name="deck_name" id="deck_name"/>
+    <label for="front">Front:</label>
+    <input type="text" name="front" id="front"/>
+    <label for="back">Back:</label>
+    <input type="text" name="back" id="back"/>
     <input type="submit" value="Create"/>
 </form>
+<a href="{% url 'review' pk %}">Review</a>
 </body>
 </html>

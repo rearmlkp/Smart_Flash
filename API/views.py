@@ -1,9 +1,10 @@
 # from .serializers import UserSerializer, GroupSerializer
 import hashlib
-
+import random
 import nltk
 import numpy
 import pandas
+import datetime
 from keras.layers import Dense
 from keras.models import Sequential
 from rest_framework import status
@@ -11,6 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.decorators import renderer_classes
 from rest_framework.response import Response
 from rest_framework_xml.renderers import XMLRenderer
+from datetime import timedelta
 
 from .models import Card, User, Deck
 from .serializers import CardSerializer, DeckSerializer, UserSerializer
@@ -169,29 +171,30 @@ def card_list(request, pk):
 
     if request.method == 'GET':
         try:
-            cards = Card.objects.filter(deck__in=deck)
+            cards = Card.objects.filter(deck=deck)
         except Card.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         serializer = CardSerializer(cards, many=True)
-        return Response(serializer.data)
+        if len(serializer.data) == 0:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
         data = request.data
         if ('type' in data) and ('front' in data) and ('back' in data):
             card = Card(type=data['type'], front=data['front'], back=data['back'])
             card.save()
-            # TODO: Add to deck after save
+            deck.cards.add(card)
             return Response(status=status.HTTP_201_CREATED)
-        if ('back' not in data) and ('front' in data):
+        if ('back' not in data) and ('front' in data) and ('type' in data):
             front = data['front']
             result = predict_tag(front)
             if len(result) == 2:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
             back = hide(front, result[0])
-            data['back'] = back
-            card = Card(type=data['type'], front=data['front'], back=data['back'])
+            card = Card(type=data['type'], front=data['front'], back=back)
             card.save()
-            # TODO: Add to deck after save
+            deck.cards.add(card)
             return Response(status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -220,7 +223,7 @@ def card_detail(request, pk):
 
 @api_view(['POST'])
 def login(request):
-    print(request.data)
+    # print(request.data)
     username = request.data['username']
     password = request.data['password']
     try:
@@ -266,4 +269,40 @@ def create_deck(request):
     deck.save()
     return Response(status=status.HTTP_201_CREATED)
 
-# TODO: Edit, Delete deck API
+
+@api_view(['POST'])
+def edit_deck(request, pk):
+    try:
+        deck = Deck.objects.get(pk=pk)
+    except Deck.DoesNotExist:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    deck.name = request.data['name']
+    deck.save()
+    return Response(status=status.HTTP_200_OK)
+
+
+# TODO: Review date calculation API
+# This is just the dummy
+def review(card):
+    date = card.last_review_date
+    rand = random.randint(0, card.review_count)
+    new_date = date + timedelta(days=rand)
+    return new_date
+
+
+@api_view(['GET'])
+@renderer_classes((XMLRenderer,))
+def review_today(request, pk):
+    now = datetime.datetime.now()
+    deck = Deck.objects.get(pk=pk)
+    cards = Card.objects.filter(deck=deck)
+    list_id = []
+    for card in cards:
+        re_date = review(card)
+        if re_date.replace(tzinfo=None) < now.replace(tzinfo=None):
+            list_id.append(card.id)
+    cards = Card.objects.filter(pk__in=list_id)
+    serializer = CardSerializer(data=cards, many=True)
+    if serializer.is_valid():
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_200_OK)
