@@ -4,22 +4,37 @@
     <meta charset="UTF-8">
     <title>Home Page</title>
     <style>
-        table{
+        table {
             margin: 20px;
         }
-        table tbody td{
+
+        table tbody td {
             border: 1px solid black;
             padding: 5px;
         }
-        input{
+
+        input {
             margin: 0 5px;
         }
 
+        .header {
+            width: 100%;
+            height: 50px;
+        }
+
+        .end {
+            float: right;
+            width: auto;
+        }
     </style>
 </head>
 <body>
-<p>Welcome, {{ username }}</p>
-<a href="{% url 'logout' %}">Logout</a>
+<div class="header">
+    <div class="end">
+        <span>Welcome, {{ username }}</span>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</div>
 {% if error_message %}
     <p>{{ error_message }}</p>
 {% else %}

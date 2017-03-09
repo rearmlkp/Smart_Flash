@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^decks/create/$', views.create_deck),
     url(r'^decks/(?P<pk>[0-9]+)$', views.card_list),
     url(r'^decks/edit/(?P<pk>[0-9]+)$', views.edit_deck),
+    url(r'^decks/delete/(?P<pk>[0-9]+)$', views.delete_deck),
     url(r'^decks/review/(?P<pk>[0-9]+)$', views.review_today),
 
     # Web Stuff
@@ -41,7 +42,7 @@ urlpatterns = [
     url(r'^web/logout/$', web_views.logout, name='logout'),
     url(r'^web/register/$', web_views.register, name='register'),
     url(r'^web/deck/create$', web_views.deck_create, name='deck_create'),
-    url(r'^web/deck/(?P<pk>[0-9]+)/edform$', web_views.deck_edit_delete, name='deck_edit_delete'),
+    url(r'^web/deck/edform$', web_views.deck_edit_delete, name='deck_edit_delete'),
     url(r'^web/deck/(?P<pk>[0-9]+)$', web_views.deck_detail, name='deck_detail'),
     url(r'^web/deck/(?P<pk>[0-9]+)/card/create$', web_views.create_card, name='card_create'),
     url(r'^web/deck/review/(?P<pk>[0-9]+)$', web_views.review, name='review'),

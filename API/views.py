@@ -281,6 +281,16 @@ def edit_deck(request, pk):
     return Response(status=status.HTTP_200_OK)
 
 
+@api_view(['POST'])
+def delete_deck(request, pk):
+    try:
+        deck = Deck.objects.get(pk=pk)
+    except Deck.DoesNotExist:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    deck.delete()
+    return Response(status=status.HTTP_200_OK)
+
+
 # TODO: Review date calculation API
 # This is just the dummy
 def review(card):

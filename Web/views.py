@@ -2,6 +2,7 @@ import requests
 from django.shortcuts import render
 from lxml import etree
 from rest_framework import status
+from django.http import HttpResponseRedirect
 
 localhost = "http://127.0.0.1"
 API_port = '8000'
@@ -33,7 +34,7 @@ def index(request):
 def logout(request):
     del request.session['username']
     request.session.modified = True
-    return render(request, 'index.html')
+    return HttpResponseRedirect('/web/')
 
 
 def register(request):
@@ -68,7 +69,7 @@ def homepage(request):
     schema_file = etree.parse(schema_file)
     xmlschema = etree.XMLSchema(schema_file)
     xml_doc = etree.XML(r.content)
-    print(xmlschema.validate(xml_doc))
+    # print(xmlschema.validate(xml_doc))
     if xmlschema.validate(xml_doc):
         xslt_file = open('XSLT/deck_xslt.xsl', 'r')
         xslt_file = etree.parse(xslt_file)
@@ -95,7 +96,7 @@ def deck_create(request):
         return render(request, 'homepage.html', {
             'error_message': "Can't create deck!"
         })
-    return homepage(request)
+    return HttpResponseRedirect('/web/')
 
 
 def deck_edit_delete(request):
@@ -113,6 +114,7 @@ def deck_edit_delete(request):
             return render(request, 'homepage.html', {
                 'error_message': "Can't edit deck!"
             })
+    return HttpResponseRedirect('/web/')
 
 
 # TODO: Deck view: Edit, Delete cards
@@ -158,11 +160,9 @@ def create_card(request, pk):
             del data['back']
         r = requests.post(API_url + "decks/" + pk, data=data)
         if r.status_code == status.HTTP_201_CREATED:
-            return deck_detail(request, pk)
-        else:
-            return deck_detail(request, pk)
+            return HttpResponseRedirect('/web/deck' + pk)
     else:
-        return render(request, 'homepage.html')
+        return HttpResponseRedirect('/web/')
 
 
 def review(request, pk):
