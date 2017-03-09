@@ -3,19 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome</title>
+    <style>
+        input {
+            width: 150px;
+            height: 20px;
+            margin: 10px;
+        }
+        input[type=submit]{
+            background-color: lightgray;
+            color: black;
+        }
+        input[type=submit]:hover {
+            border: 1px solid grey;
+            transition: all 0.5s ;
+        }
+        .form {
+            width: 20%;
+            background-color: #ebebeb;
+            margin: 0 auto;
+            text-align: center;
+            position: fixed;
+            top:50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            box-shadow: grey 2px 2px 1px;
+        }
+    </style>
 </head>
 <body>
-    <form action="{% url 'index' %}" method="POST">
-        {% csrf_token %}
-        <label for="username">Username: </label>
-        <input type="text" name="username" />
-        <label for="password">Password: </label>
-        <input type="password" name="password" />
-        <input type="submit" value="Login" />
-    </form>
-    <a href="{% url 'register' %}">Register</a>
-    {% if error_message %}
-        <p class="error">{{ error_message }}</p>
-    {% endif %}
+<form action="{% url 'index' %}" method="POST">
+    {% csrf_token %}
+    <div class="form">
+        <span>Username</span><input type="text" name="username" placeholder="name"/></br>
+        <span>Password</span><input type="password" name="password"  placeholder="password"/></br>
+        <input type="submit" value="Login"/>
+        <p class="message">Not registered? <a href="#">Create an account</a>
+    </div>
+</form>
+<a href="{% url 'register' %}">Register</a>
+{% if error_message %}
+    <p class="error">{{ error_message }}</p>
+{% endif %}
 </body>
 </html>

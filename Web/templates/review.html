@@ -3,17 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Review</title>
+    <style>
+        #input_box {
+            display: inline-block;
+        }
+
+        #form-wrapper {
+
+        margin: 0 20px;
+        }
+
+        #error {
+            color: red;
+            display: none;
+        }
+
+        #main_content {
+            margin-top: 20px;
+        }
+
+        #data_list {
+            width: 20%;
+            float: left;
+            height: 500px;
+            border-right: 1px solid black;
+        }
+
+        #right {
+            float: left;
+        }
+
+        #data_list:after {
+            content: ' ';
+            display: block;
+            clear: both;
+        }
+    </style>
 </head>
 <body>
 <p>Welcome, {{ username }}</p>
 <a href="{% url 'logout' %}">Logout</a>
+<div id="main_content">
+    <div id="data_list">
+        fhjdkshfjksd
+    </div>
+    <div id="right">
+        <div id="form-wrapper">
+            <p id="display"></p>
+            <div id="error">Your answer is wrong !!!</div>
+            <div id="input_box"></div>
 
-<p id="display"></p>
-
-<div id="input_box"></div>
-
-<input type="button" id="check" value="Check">
-
+            <input type="button" id="check" value="Check">
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     var displays = {{ displays|safe }};
     var words = {{ words|safe }};
@@ -27,21 +70,28 @@
     document.getElementById("input_box").innerHTML = html;
     document.getElementById("check").onclick = function () {
         var flag = true;
+        {#        var r = document.createElement('div');#}
+        {#            r.setAttribute('id','error');#}
+        {#            r.innerHTML = 'Your answer is wrong !!!';#}
         for (j = 0; j < words[i].length; ++j) {
             var s = "input_" + j;
             var inputed = document.getElementById(s).value;
             if (inputed != words[i][j]) flag = false;
         }
         if (flag) {
-            alert('Good answer!');
+            {#            alert('Good answer!');#}
+            document.getElementById('error').style.display = 'none';
         } else {
-            alert('Wrong answer!');
+            {#            alert('Wrong answer!');#}
+            --i;
+            document.getElementById('error').style.display = 'block';
         }
+
         ++i;
         if (i == displays.length) {
             alert('You have finished reviewing!');
             // Make a summarized page
-            
+
         }
         else {
             document.getElementById("display").innerHTML = displays[i];

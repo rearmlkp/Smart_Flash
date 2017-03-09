@@ -3,6 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Deck</title>
+    <style>
+        table{
+            width: 80%;
+            margin: 20px;
+        }
+        table td{
+            text-align: center;
+        }
+        table tbody td{
+             border: 1px solid black;
+        }
+        table tbody tr{
+            height: 50px;
+        }
+        input{
+            height: 20px;
+            width:300px;
+            outline: none;
+        }
+        input:hover {
+            outline: none;
+        }
+        input[type=submit]{
+            width: 50px;
+            margin: 0 10px;
+            height: 30px;
+            border-radius: 5px;
+        }
+        .wrapper{
+            width: 80%;
+            margin: 20px;
+        }
+    </style>
 </head>
 <body>
 <p>Welcome, {{ username }}</p>
@@ -16,11 +49,13 @@
 {% endif %}
 <form method="post" action="{% url 'card_create' pk %}">
     {% csrf_token %}
+    <div class="wrapper">
     <label for="front">Front:</label>
     <input type="text" name="front" id="front"/>
     <label for="back">Back:</label>
     <input type="text" name="back" id="back"/>
     <input type="submit" value="Create"/>
+        </div>
 </form>
 <a href="{% url 'review' pk %}">Review</a>
 </body>
