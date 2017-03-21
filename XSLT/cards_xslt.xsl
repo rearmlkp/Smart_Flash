@@ -16,10 +16,13 @@
                     <form action="edform" method="post">
                         <tr>
                             <td>
-                                <input type="text" value="{front}" name="front"/>
+                                <input type="text" value="{front}" name="front" id="front_{id}"/>
+                                <button type="button" onClick="onHideClick()">Hide</button>
                             </td>
+                            <input type="hidden" value="{back}" name="back" id="back_{id}"/>
                             <td>
-                                <input type="text" value="{back}" name="back"/>
+                                <input type="text" value="{back}" name="transformed" id="back_read_{id}"
+                                       readonly="true"/>
                             </td>
                             <input type="hidden" value="{id}" name="id"/>
                             <td>

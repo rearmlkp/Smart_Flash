@@ -14,8 +14,6 @@
             <tbody>
                 <xsl:for-each select="list-item">
                     <form action="deck/edform" method="post">
-                        <input type="hidden" name="csrfmiddlewaretoken"
-                               value="qZSp2nCdWg0un4ca9fTbrdCgNsXHEWNASYpOOMdJgYUwFjTLjzupJQ9Pq4AJCKuw"/>
                         <tr>
                             <td>
                                 <a href="deck/{id}">Cards</a>

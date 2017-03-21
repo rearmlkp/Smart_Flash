@@ -117,13 +117,32 @@ def deck_edit_delete(request):
     return HttpResponseRedirect('/web/')
 
 
-# TODO: Deck view: Edit, Delete cards
+def card_edit_delete(request, pk):
+    if 'edit' in request.POST:
+        r = requests.post(API_url + "card/edit/" + request.POST['id'], data={
+            'front': request.POST['front'],
+            'back': request.POST['back']
+        })
+        if r.status_code != status.HTTP_200_OK:
+            return render(request, 'homepage.html', {
+                'error_message': "Can't edit deck!"
+            })
+    else:
+        r = requests.post(API_url + "card/delete/" + request.POST['id'])
+        if r.status_code != status.HTTP_200_OK:
+            return render(request, 'homepage.html', {
+                'error_message': "Can't edit deck!"
+            })
+    return HttpResponseRedirect('/web/deck/' + pk)
+
+
 def deck_detail(request, pk):
     r = requests.get(API_url + "decks/" + pk)
     if r.status_code != status.HTTP_200_OK:
         return render(request, 'deck.html', {
             'error_message': "You have no cards!",
             'pk': pk,
+            'arr': [],
             'username': request.session['username']
         })
     # XML validation:
@@ -136,15 +155,21 @@ def deck_detail(request, pk):
         xslt_file = etree.parse(xslt_file)
         transform = etree.XSLT(xslt_file)
         result = transform(xml_doc)
+        list_id = xml_doc.xpath('/root/list-item/id')
+        arr = []
+        for i in range(len(list_id)):
+            arr.append(list_id[i].text)
         return render(request, 'deck.html', {
             'data': str(result),
             'pk': pk,
+            'arr': arr,
             'username': request.session['username']
         })
     else:
         return render(request, 'deck.html', {
             'error_message': "error while validating XML",
             'pk': pk,
+            'arr': [],
             'username': request.session['username']
         })
 
@@ -160,7 +185,7 @@ def create_card(request, pk):
             del data['back']
         r = requests.post(API_url + "decks/" + pk, data=data)
         if r.status_code == status.HTTP_201_CREATED:
-            return HttpResponseRedirect('/web/deck' + pk)
+            return HttpResponseRedirect('/web/deck/' + pk)
     else:
         return HttpResponseRedirect('/web/')
 

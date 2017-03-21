@@ -1,48 +1,23 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Review</title>
-    <style>
-        #input_box {
-            display: inline-block;
-        }
-
-        #form-wrapper {
-
-        margin: 0 20px;
-        }
-
-        #error {
-            color: red;
-            display: none;
-        }
-
-        #main_content {
-            margin-top: 20px;
-        }
-
-        #data_list {
-            width: 20%;
-            float: left;
-            height: 500px;
-            border-right: 1px solid black;
-        }
-
-        #right {
-            float: left;
-        }
-
-        #data_list:after {
-            content: ' ';
-            display: block;
-            clear: both;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'review.css' %}"/>
 </head>
 <body>
-<p>Welcome, {{ username }}</p>
-<a href="{% url 'logout' %}">Logout</a>
+<div class="header">
+    <div class="home">
+        <a href="{% url 'index' %}">Home</a>
+    </div>
+    <div class="end">
+        <span>Welcome, {{ username }}</span>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</div>
+<hr/>
 <div id="main_content">
     <div id="data_list">
         fhjdkshfjksd
@@ -58,6 +33,13 @@
     </div>
 </div>
 <script type="text/javascript">
+    function size_sum(i, n) {
+        var dt = document.getElementById('data_list');
+        var str = '';
+        str += '<p>Current question: ' + i + '</p>';
+        str += '<p>Total question: ' + n + '</p>';
+        dt.innerHTML = str;
+    }
     var displays = {{ displays|safe }};
     var words = {{ words|safe }};
     var i = 0, j;
@@ -68,6 +50,7 @@
         html += '<input type="text" id="' + s + '" />'
     }
     document.getElementById("input_box").innerHTML = html;
+    size_sum(i + 1, displays.length);
     document.getElementById("check").onclick = function () {
         var flag = true;
         {#        var r = document.createElement('div');#}
@@ -91,7 +74,7 @@
         if (i == displays.length) {
             alert('You have finished reviewing!');
             // Make a summarized page
-
+            window.location.href = '{% url "index" %}'
         }
         else {
             document.getElementById("display").innerHTML = displays[i];
@@ -102,6 +85,7 @@
             }
             document.getElementById("input_box").innerHTML = html;
         }
+        size_sum(i + 1, displays.length);
     }
 </script>
 </body>

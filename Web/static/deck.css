@@ -1,0 +1,61 @@
+table {
+    width: 80%;
+    margin: 20px;
+}
+
+table td {
+    text-align: center;
+}
+
+table tbody td {
+    border: 1px solid black;
+}
+
+table tbody tr {
+    height: 50px;
+}
+
+input {
+    height: 20px;
+    width: 300px;
+    outline: none;
+}
+
+input:hover {
+    outline: none;
+}
+
+input[type=submit] {
+    width: 50px;
+    margin: 0 10px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+button {
+    width: 50px;
+    margin: 0 10px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.wrapper {
+    width: 80%;
+    margin: 20px;
+}
+
+.header {
+    width: 100%;
+    height: 50px;
+}
+
+.end {
+    float: right;
+    width: auto;
+}
+
+.home {
+    float: left;
+    width: auto;
+    height: 50px;
+}
